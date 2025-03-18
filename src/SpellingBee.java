@@ -48,21 +48,41 @@ public class SpellingBee {
         makeWords("", letters);
     }
 
+    // Generate helper method
     public void makeWords(String word, String letters) {
+        // Base case when the letters
         if (letters.length() == 0) {
+            words.add(word);
             return;
         }
-        word += letters.substring(0,1);
-        words.add(word);
-        makeWords(word, letters.substring(1));
-
+        // Generate word if there is one
+        if (!word.isEmpty()) {
+            words.add(word);
+        }
+        // Add each permutation of letters to the current word
+        for (int i = 0; i < letters.length(); i++) {
+            makeWords(word + letters.substring(i, i + 1), letters.substring(0,i) + letters.substring(i + 1));
+        }
     }
 
 
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
     //  that will find the substrings recursively.
     public void sort() {
-        // YOUR CODE HERE
+        mergeSort(words.size(), 0, words);
+    }
+
+    public ArrayList<String> mergeSort (int high, int low, ArrayList<String> list) {
+        if (list.size() == 1) {
+            return;
+        }
+        ArrayList<String> list1 = ()
+        ArrayList<String> list2 = ()
+
+    }
+
+    public ArrayList<String> merge() {
+
     }
 
     // Removes duplicates from the sorted list.
@@ -138,9 +158,9 @@ public class SpellingBee {
         // Generate and print all valid words from those letters.
         SpellingBee sb = new SpellingBee(letters);
         sb.generate();
-        sb.sort();
-        sb.removeDuplicates();
-        sb.checkWords();
+//        sb.sort();
+//        sb.removeDuplicates();
+//        sb.checkWords();
         try {
             sb.printWords();
         } catch (IOException e) {
