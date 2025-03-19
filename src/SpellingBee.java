@@ -51,7 +51,7 @@ public class SpellingBee {
     // Generate helper method
     public void makeWords(String word, String letters) {
         // Base case when the letters
-        if (letters.length() == 0) {
+        if (letters.isEmpty()) {
             words.add(word);
             return;
         }
@@ -61,7 +61,7 @@ public class SpellingBee {
         }
         // Add each permutation of letters to the current word
         for (int i = 0; i < letters.length(); i++) {
-            makeWords(word + letters.substring(i, i + 1), letters.substring(0,i) + letters.substring(i + 1));
+            makeWords(word + letters.charAt(i), letters.substring(0,i) + letters.substring(i + 1));
         }
     }
 
@@ -157,7 +157,7 @@ public class SpellingBee {
         int mid;
         // until word found
         while(true) {
-            // initialze mid depending on high and low
+            // Initialize mid depending on high and low
             mid = low + (high - low) / 2;
             // If word found;
             if(word.compareTo(DICTIONARY[mid]) == 0) {
