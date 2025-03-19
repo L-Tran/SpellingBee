@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Spelling Bee
+ * Spelling Bee by Logan Tran
  *
  * This program accepts an input of letters. It prints to an output file
  * all English words that can be generated from those letters.
@@ -69,20 +69,64 @@ public class SpellingBee {
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
     //  that will find the substrings recursively.
     public void sort() {
-        mergeSort(words.size(), 0, words);
+        // call recursive method
+        words = mergeSort(words);
     }
 
-    public ArrayList<String> mergeSort (int high, int low, ArrayList<String> list) {
+    public ArrayList<String> mergeSort (ArrayList<String> list) {
+        // Base case when the list is one long
         if (list.size() == 1) {
-            return;
+            return list;
         }
-        ArrayList<String> list1 = ()
-        ArrayList<String> list2 = ()
-
+        // Declare left and right lists
+        ArrayList<String> list1 = new ArrayList<String>();
+        ArrayList<String> list2 = new ArrayList<String>();
+        // Add to each list each side split by the middle
+        int i = 0;
+        while(i < list.size()/2) {
+            list1.add(list.get(i));
+            i++;
+        }
+        while(i < list.size()) {
+            list2.add(list.get(i));
+            i++;
+        }
+        // Divide the lists
+        list1 = mergeSort(list1);
+        list2 = mergeSort(list2);
+        // Sort and merge
+        return merge(list1, list2);
     }
 
-    public ArrayList<String> merge() {
-
+    public ArrayList<String> merge(ArrayList<String> list1,ArrayList<String> list2) {
+        // Counter for each string
+        int i = 0;
+        int j = 0;
+        // Big String to add to
+        ArrayList<String> list = new ArrayList<String>();
+        // While the lists are not fully run through
+        while(i < list1.size() && j < list2.size()) {
+            // add left it is smaller and shift index
+            if(list1.get(i).compareTo(list2.get(j)) <= 0) {
+                list.add(list1.get(i));
+                i++;
+            }
+            // add right it is smaller and shift index
+            else{
+                list.add(list2.get(j));
+                j++;
+            }
+        }
+        // Finish adding the rest of the lists
+        while(i < list1.size()){
+            list.add(list1.get(i));
+            i++;
+        }
+        while(j < list2.size()){
+            list.add(list2.get(j));
+            j++;
+        }
+        return list;
     }
 
     // Removes duplicates from the sorted list.
@@ -100,7 +144,38 @@ public class SpellingBee {
     // TODO: For each word in words, use binary search to see if it is in the dictionary.
     //  If it is not in the dictionary, remove it from words.
     public void checkWords() {
-        // YOUR CODE HERE
+        // Check each word in words
+        for(int i = 0; i < words.size(); i++){
+            if (!contains(words.get(i), 0, DICTIONARY_SIZE)){
+                words.remove(i);
+                i--;
+            }
+        }
+    }
+
+    public boolean contains(String word, int low, int high) {
+        int mid;
+        // until word found
+        while(true) {
+            // initialze mid depending on high and low
+            mid = low + (high - low) / 2;
+            // If word found;
+            if(word.compareTo(DICTIONARY[mid]) == 0) {
+                return true;
+            }
+            // If word is to the left shorten dict to left side
+            if(word.compareTo(DICTIONARY[mid]) < 0) {
+                high = mid - 1;
+            }
+            // If word is to the left shorten dict to right side
+            if(word.compareTo(DICTIONARY[mid]) > 0) {
+                low = mid + 1;
+            }
+            // If the word doesn't exist
+            if (low > high) {
+                return false;
+            }
+        }
     }
 
     // Prints all valid words to wordList.txt
@@ -158,9 +233,9 @@ public class SpellingBee {
         // Generate and print all valid words from those letters.
         SpellingBee sb = new SpellingBee(letters);
         sb.generate();
-//        sb.sort();
-//        sb.removeDuplicates();
-//        sb.checkWords();
+        sb.sort();
+        sb.removeDuplicates();
+        sb.checkWords();
         try {
             sb.printWords();
         } catch (IOException e) {
